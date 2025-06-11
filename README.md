@@ -90,7 +90,7 @@ journalctl --user -xeu nginx.service
 /usr/libexec/podman/quadlet -dryrun -user
 
 # Podman - UniFi Controller
-Nachlesen: https://docs.linuxserver.io/images/docker-unifi-network-application/#docker-compose-recommended-click-here-for-more-info
+Nachlesen: https://docs.linuxserver.io/images/docker-unifi-network-application
 
 # Netzwerk erstellen
 podman network ls
