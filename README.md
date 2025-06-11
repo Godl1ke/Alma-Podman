@@ -108,12 +108,12 @@ After=unifi-mongo.service
 
 [Container]
 Image=lscr.io/linuxserver/unifi-network-application:latest
-ContainerName=unifi-network-application
+ContainerName=unifi
 Environment=PUID=1000
 Environment=PGID=1000
 Environment=TZ=Etc/UTC
 Environment=MONGO_USER=unifi
-Environment=MONGO_PASS=unifi123
+Environment=MONGO_PASS=letmeinplz
 Environment=MONGO_HOST=unifi-db
 Environment=MONGO_PORT=27017
 Environment=MONGO_DBNAME=unifi
@@ -132,7 +132,7 @@ PublishPort=8880:8880
 PublishPort=6789:6789
 PublishPort=5514:5514/udp
 
-Volume=%h/unifi:/config:Z
+Volume=%h/unifi/app:/config:Z
 
 [Service]
 Restart=always
@@ -146,11 +146,10 @@ vim .config/containers/systemd/unifi-mongo.container
 Image=docker.io/mongo:6.0
 ContainerName=unifi-db
 Environment=MONGO_INITDB_ROOT_USERNAME=unifi
-Environment=MONGO_INITDB_ROOT_PASSWORD=unifi123
+Environment=MONGO_INITDB_ROOT_PASSWORD=letmeinplz
 Environment=MONGO_INITDB_DATABASE=unifi
-Volume=%h/unifi-mongo:/data/db:Z
+Volume=%h/unifi/db:/data/db:Z
 Network=unifi-net
-# PublishPort=27017:27017
 
 [Service]
 Restart=always
@@ -170,12 +169,15 @@ sudo firewall-cmd --permanent --add-port=6789/tcp
 sudo firewall-cmd --permanent --add-port=5514/udp
 sudo firewall-cmd --reload
 
-mkdir -p $HOME/unifi
+mkdir -p $HOME/unifi/app
+mkdir -p $HOME/unifi/db
+
 podman pull lscr.io/linuxserver/unifi-network-application:latest
+podman pull docker.io/mongo:6:0
+
 systemctl --user daemon-reload
 systemctl --user start unifi-mongo
 systemctl --user start unifi
 
 # Debug
 podman exec -it unifi-network-application bash
-
